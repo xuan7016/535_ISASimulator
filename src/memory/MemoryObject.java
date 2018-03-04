@@ -17,7 +17,7 @@ public class MemoryObject {
         this.higherLevelMemory = null;
     }
 
-    public MemoryObject(int size, CacheObject lowerLevelMemory){
+    public MemoryObject(int size, CacheObject higherLevelMemory){
         this.memory = new int[size];
         this.higherLevelMemory = higherLevelMemory;
     }
