@@ -10,7 +10,7 @@ public class CacheObject {
     //1KB / 4B = 256
     //8KB = 2048 L1
     //1MB / 4B(a word) = 262144
-    //16MB = 4194304 =  0b10000000000000000000000 22 0's
+    //16MB = 4194304 =  22 bits
 
 
     private CacheSet cache[];
@@ -92,7 +92,6 @@ public class CacheObject {
                     break;
                 }
             }
-           // System.out.println("miss");
             //if no empty space evict largest LRU
             if (index == -1) {
                 // find largest LRU index
@@ -107,7 +106,6 @@ public class CacheObject {
                 }
                 index = largest_lru_index;
             }
-            //System.out.println(index);
             // now we have space to put data
             tags[index] = tag;
             set.setTags(tags);
@@ -122,12 +120,7 @@ public class CacheObject {
             }
             setData[index] = data;
             set.setData(setData);
-            //System.out.println(Arrays.toString(set.getTags()));
         }
-//        System.out.println(Arrays.toString(tags));
-//        System.out.println(tag);
-//        System.out.println(Arrays.asList(tags).indexOf(tag));
-//        System.out.println(set.getData()[Arrays.asList(tags).indexOf(tag)]);
         Integer[] temp = Arrays.stream(tags).boxed().toArray(Integer[]::new);
         return new RWMemoryObject(set.getData()[Arrays.asList(temp).indexOf(tag)][dataIndex], latencyTime + latency);
     }
