@@ -85,10 +85,6 @@ public class CacheObject {
                     break;
                 }
             }
-            //set LRU
-            for (int i=0; i<4; i++){
-
-            }
             //if no empty space evict largest LRU
             if (index == -1) {
                 // find largest LRU index
@@ -103,6 +99,16 @@ public class CacheObject {
                 }
                 index = largest_lru_index;
             }
+            //set LRU
+            int[] lru = set.getLru();
+            for (int i=0; i<4; i++){
+                if (i==index){
+                    lru[i]=0;
+                }else{
+                    lru[i] = lru[i] + 1;
+                }
+            }
+            set.setLru(lru);
             // now we have space to put data
             tags[index] = tag;
             set.setTags(tags);
