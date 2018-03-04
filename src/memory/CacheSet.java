@@ -3,6 +3,7 @@ package memory;
 public class CacheSet {
 
     //line size 16 * 4B = 64B
+    //set size 4 * 64 = 256B
     private int[] tags;
     private int[][] data;
     private boolean[] dirty;

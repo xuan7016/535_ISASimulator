@@ -8,18 +8,11 @@ public class MemoryObject {
     //16MB = 4194304
 
     private int memory[]; // word addressed
-    private CacheObject higherLevelMemory;
     private int latencyTime = 100;
 
-
+    //size in words
     public MemoryObject(int size){
         this.memory = new int[size];
-        this.higherLevelMemory = null;
-    }
-
-    public MemoryObject(int size, CacheObject higherLevelMemory){
-        this.memory = new int[size];
-        this.higherLevelMemory = higherLevelMemory;
     }
 
     public RWMemoryObject read(int address){
