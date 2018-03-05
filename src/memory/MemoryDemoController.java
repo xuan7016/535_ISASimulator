@@ -90,7 +90,7 @@ public class MemoryDemoController {
 
     @FXML
     public void read_button(){
-        int address = Integer.parseInt(this.addressTextField.getText());
+        int address = parseStringBinaryOrDecimal(this.addressTextField.getText());
         RWMemoryObject readContent = level1.read(address);
         readText.setText("Memory Content: " + readContent.getWord());
         latencyText.setText("Latency: " + readContent.getWait());

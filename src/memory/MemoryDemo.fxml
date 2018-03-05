@@ -25,15 +25,15 @@
       <Text layoutX="233.0" layoutY="583.0" strokeType="OUTSIDE" strokeWidth="0.0" text="L2" wrappingWidth="15.13671875" />
       <Label fx:id="L2Data" layoutX="619.0" layoutY="439.0" prefHeight="288.0" prefWidth="200.0" text="Label" />
       <Text fx:id="readText" layoutX="287.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.13671875" />
-      <Separator layoutX="202.0" layoutY="426.0" prefHeight="25.0" prefWidth="681.0" />
+      <Separator layoutX="222.0" layoutY="427.0" prefHeight="25.0" prefWidth="725.0" />
       <Text layoutX="543.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LRU" wrappingWidth="38.259765625" />
       <Label fx:id="L1LRU" layoutX="543.0" layoutY="205.0" prefHeight="90.0" prefWidth="15.0" text="Label" />
       <Text layoutX="539.0" layoutY="490.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LRU" wrappingWidth="38.259765625" />
       <Label fx:id="L2LRU" layoutX="543.0" layoutY="494.0" prefHeight="90.0" prefWidth="15.0" text="Label" />
       <Text layoutX="276.0" layoutY="482.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SET INDEX" wrappingWidth="67.13671875" />
       <Text layoutX="464.0" layoutY="482.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TAG" wrappingWidth="38.259765625" />
-      <Text layoutX="287.0" layoutY="410.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address: 12-bit TAG | 6-bit SET | 4-bit DATA" wrappingWidth="234.13671875" />
-      <Text layoutX="287.0" layoutY="702.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address: 9-bit TAG | 9-bit SET | 4-bit DATA" wrappingWidth="234.13671875" />
+      <Text layoutX="276.0" layoutY="410.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address: 12-bit TAG | 6-bit SET | 4-bit DATA" wrappingWidth="282.13671875" />
+      <Text layoutX="275.0" layoutY="702.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address: 9-bit TAG | 9-bit SET | 4-bit DATA" wrappingWidth="311.13671875" />
       <Text layoutX="43.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Can use binary or decimal" wrappingWidth="183.13671875" />
       <Text layoutX="22.0" layoutY="444.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MEM" />
    </children>
