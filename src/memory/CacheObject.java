@@ -142,7 +142,20 @@ public class CacheObject {
     }
 
     public int write(int address, RWMemoryObject content){
-        //write-through, no-allocate
+        //write-through no-allocate
+        int dataIndex = address & 0b1111;
+        int setIndex = (address >> 4) & mask;
+        int tag = address >> (4+maskLength);
+        CacheSet set = cache[setIndex];
+        int[] tags = set.getTags();
+        if (Arrays.asList(Arrays.stream(tags).boxed().toArray(Integer[]::new)).contains(tag)){
+            // data is already in cache, update and write to memory
+            int index = Arrays.asList(Arrays.stream(tags).boxed().toArray(Integer[]::new)).indexOf(tag);
+            int[][] setData = set.getData();
+            setData[index][dataIndex] = content.getWord();
+            set.setData(setData);
+        }
+        // data is not in cache, write to memory
         if (memory != null){
             return memory.write(address, new RWMemoryObject(content.getWord(), content.getWait()+latencyTime));
         }else{

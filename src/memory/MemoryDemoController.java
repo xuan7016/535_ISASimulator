@@ -1,6 +1,5 @@
 package memory;
 
-import com.sun.org.apache.bcel.internal.generic.L2D;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,7 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class MemoryDemoController {
@@ -31,6 +29,8 @@ public class MemoryDemoController {
     @FXML private Text latencyText;
     @FXML private Label L1Data;
     @FXML private Label L2Data;
+    @FXML private Label L1LRU;
+    @FXML private Label L2LRU;
 
     public MemoryDemoController(){
         this.memory = new MemoryObject(4194304);
@@ -58,12 +58,29 @@ public class MemoryDemoController {
         L2Sets.setItems(l2SetIndexItems);
         L1Data.setText("");
         L2Data.setText("");
+        L1LRU.setText("");
+        L2LRU.setText("");
+    }
+
+    private int parseStringBinaryOrDecimal(String s){
+        int number;
+        if (s.length() > 2){
+            String firstTwo = s.substring(0,2);
+            if (firstTwo.equals("0b")) {
+                number = Integer.parseInt(s.substring(2,s.length()),2);
+            }else{
+                number = Integer.parseInt(s);
+            }
+        }else{
+            number = Integer.parseInt(s);
+        }
+        return number;
     }
 
     @FXML
     public void write_button(){
-        int address = Integer.parseInt(this.addressTextField.getText());
-        int content = Integer.parseInt(this.contentTextField.getText());
+        int address = parseStringBinaryOrDecimal(this.addressTextField.getText());
+        int content = parseStringBinaryOrDecimal(this.contentTextField.getText());
         int latency = level1.write(address, new RWMemoryObject(content, 0));
         readText.setText("");
         latencyText.setText("Latency: " + latency);
@@ -86,14 +103,18 @@ public class MemoryDemoController {
         CacheSet set = level1Sets[clickedIndex];
         int[] tags = set.getTags();
         String[] tagsToDisplay = new String[tags.length];
+        String LRUs = "";
         for (int i=0;i<tagsToDisplay.length;i++){
             if (tags[i] == -1){
                 tagsToDisplay[i]="Empty";
+                LRUs = LRUs+set.getLru()[i]+"\n";
             }else{
                 tagsToDisplay[i]=Integer.toString(tags[i]);
+                LRUs = LRUs+set.getLru()[i]+"\n";
             }
         }
         ObservableList<String> items = FXCollections.observableArrayList(tagsToDisplay);
+        L1LRU.setText(LRUs);
         L1Tags.setItems(items);
     }
 
@@ -104,14 +125,18 @@ public class MemoryDemoController {
         CacheSet set = level2Sets[clickedIndex];
         int[] tags = set.getTags();
         String[] tagsToDisplay = new String[tags.length];
+        String LRUs = "";
         for (int i=0;i<tagsToDisplay.length;i++){
             if (tags[i] == -1){
                 tagsToDisplay[i]="Empty";
+                LRUs = LRUs + set.getLru()[i] + "\n";
             }else{
                 tagsToDisplay[i]=Integer.toString(tags[i]);
+                LRUs = LRUs + set.getLru()[i] + "\n";
             }
         }
         ObservableList<String> items = FXCollections.observableArrayList(tagsToDisplay);
+        L2LRU.setText(LRUs);
         L2Tags.setItems(items);
     }
 

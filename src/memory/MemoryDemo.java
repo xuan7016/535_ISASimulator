@@ -1,14 +1,10 @@
 package memory;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import sun.plugin.javascript.navig.Anchor;
 
 import java.io.IOException;
 
@@ -16,7 +12,6 @@ public class MemoryDemo extends Application {
 
     private Stage primaryStage;
     private AnchorPane rootLayout;
-    private CacheObject level1;
 
 
     public static void main(String[] args) {
@@ -38,9 +33,5 @@ public class MemoryDemo extends Application {
         }catch(IOException e){
             e.printStackTrace();
         }
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
     }
 }
