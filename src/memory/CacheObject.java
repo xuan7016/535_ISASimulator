@@ -2,6 +2,8 @@ package memory;
 
 import java.util.Arrays;
 
+//TODO: cached write is wong, if read then write, cache is not updated.
+
 public class CacheObject {
     // 16 word line, 64B per line
     // 4-way set, 256B per set

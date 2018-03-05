@@ -25,5 +25,7 @@ public class MemoryObject {
         return content.getWait() + latencyTime;
     }
 
-
+    public int[] getMemory() {
+        return memory;
+    }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="memory.MemoryDemoController">
+   <children>
+      <ListView fx:id="memoryList" layoutX="60.0" layoutY="170.0" prefHeight="536.0" prefWidth="132.0" />
+      <TextField fx:id="addressTextField" layoutX="43.0" layoutY="31.0" promptText="ADDRESS" />
+      <Button fx:id="readButton" layoutX="211.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#read_button" text="READ" />
+      <TextField fx:id="contentTextField" layoutX="43.0" layoutY="96.0" promptText="CONTENT" />
+      <Button fx:id="writeButton" layoutX="208.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#write_button" text="WRITE" />
+      <ListView fx:id="L1Sets" layoutX="257.0" layoutY="205.0" onMouseClicked="#L1Set_clicked" prefHeight="178.0" prefWidth="105.0" />
+      <ListView fx:id="L2Sets" layoutX="257.0" layoutY="494.0" onMouseClicked="#L2Set_clicked" prefHeight="178.0" prefWidth="105.0" />
+      <ListView fx:id="L1Tags" layoutX="431.0" layoutY="205.0" onMouseClicked="#L1Tags_clicked" prefHeight="178.0" prefWidth="105.0" />
+      <ListView fx:id="L2Tags" layoutX="431.0" layoutY="494.0" onMouseClicked="#L2Tags_clicked" prefHeight="178.0" prefWidth="105.0" />
+      <Text layoutX="276.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SET INDEX" wrappingWidth="67.13671875" />
+      <Text layoutX="474.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TAG" wrappingWidth="38.259765625" />
+      <Text fx:id="latencyText" layoutX="287.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.13671875" />
+      <Label fx:id="L1Data" layoutX="573.0" layoutY="151.0" prefHeight="288.0" prefWidth="200.0" text="Label" />
+      <Text layoutX="226.0" layoutY="299.0" strokeType="OUTSIDE" strokeWidth="0.0" text="L1" wrappingWidth="15.13671875" />
+      <Text layoutX="233.0" layoutY="583.0" strokeType="OUTSIDE" strokeWidth="0.0" text="L2" wrappingWidth="15.13671875" />
+      <Label fx:id="L2Data" layoutX="573.0" layoutY="439.0" prefHeight="288.0" prefWidth="200.0" text="Label" />
+      <Text fx:id="readText" layoutX="287.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.13671875" />
+      <Separator layoutX="202.0" layoutY="426.0" prefHeight="25.0" prefWidth="681.0" />
+   </children>
+</AnchorPane>
