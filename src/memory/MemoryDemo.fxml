@@ -35,5 +35,6 @@
       <Text layoutX="287.0" layoutY="410.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address: 12-bit TAG | 6-bit SET | 4-bit DATA" wrappingWidth="234.13671875" />
       <Text layoutX="287.0" layoutY="702.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address: 9-bit TAG | 9-bit SET | 4-bit DATA" wrappingWidth="234.13671875" />
       <Text layoutX="43.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Can use binary or decimal" wrappingWidth="183.13671875" />
+      <Text layoutX="22.0" layoutY="444.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MEM" />
    </children>
 </AnchorPane>
