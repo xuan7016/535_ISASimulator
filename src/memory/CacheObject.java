@@ -56,6 +56,24 @@ public class CacheObject {
         }
     }
 
+
+    // direct read the cache without simulating the caching
+    // should not be used in simulation, for UI only
+    public int directRead(int address){
+        int dataIndex = address & 0b1111;
+        int setIndex = (address >> 4) & mask;
+        int tag = (address >> (4+maskLength));
+        CacheSet set = cache[setIndex];
+        int[] tags = set.getTags();
+        if (Arrays.asList(Arrays.stream(tags).boxed().toArray(Integer[]::new)).contains(tag)){
+            Integer[] temp = Arrays.stream(tags).boxed().toArray(Integer[]::new);
+            int index = Arrays.asList(Arrays.stream(tags).boxed().toArray(Integer[]::new)).indexOf(tag);
+            return set.getData()[Arrays.asList(temp).indexOf(tag)][dataIndex];
+        }else{
+            return 0;
+        }
+    }
+
     public RWMemoryObject read(int address){
         int dataIndex = address & 0b1111;
         int setIndex = (address >> 4) & mask;

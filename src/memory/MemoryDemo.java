@@ -3,6 +3,7 @@ package memory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -11,7 +12,7 @@ import java.io.IOException;
 public class MemoryDemo extends Application {
 
     private Stage primaryStage;
-    private AnchorPane rootLayout;
+    private TabPane rootLayout;
 
 
     public static void main(String[] args) {
@@ -26,7 +27,7 @@ public class MemoryDemo extends Application {
 
         try{
             FXMLLoader loader = new FXMLLoader(MemoryDemo.class.getResource("MemoryDemo.fxml"));
-            rootLayout = (AnchorPane) loader.load();
+            rootLayout = (TabPane) loader.load();
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
