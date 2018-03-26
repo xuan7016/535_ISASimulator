@@ -14,7 +14,8 @@ public class Decoder {
     }
 
     public InstructionResult decode(int instruction){
-        int firstThree = (int)(instruction >> 29);
+        int firstThree = (int)(instruction >>> 29);
+        System.out.println(firstThree);
         switch(firstThree){
             case 1:
                 // ALU operations
@@ -22,6 +23,8 @@ public class Decoder {
             case 2:
                 // branch operations
                 return branch_decode(instruction);
+//            case 3:
+//                return logic_decode(instruction);
             case 4:
                 // memory operations
                 return mem_decode(instruction);
@@ -34,7 +37,7 @@ public class Decoder {
     //index start from 0
     private static int getIntInRange(int bits, int start, int length){
         int mask = (1 << length) -1;
-        int shiftAmount = (32 - Integer.numberOfLeadingZeros(bits)) - (start + length);
+        int shiftAmount = 32 - (start + length);
         return (bits >>> shiftAmount) & mask;
 
     }
@@ -223,8 +226,20 @@ public class Decoder {
         return null;
     }
 
+//    private InstructionResult logic_decode(int instruction){
+//        int operation = (instruction >>> 24) * 0b00011111;
+//        int rd = 0;
+//        int rn = 0;
+//        int result = 0;
+//        switch(operation){
+//            case 1:
+//                //EQ
+//                rd = getIntInRange(instruction, )
+//        }
+//    }
+
     private InstructionResult mem_decode(int instruction){
-        int operation = (instruction >>> 28) & 0b000111;
+        int operation = (instruction >>> 26) & 0b000111;
         int rd = 0;
         int rn = 0;
         int result = 0;
@@ -241,14 +256,15 @@ public class Decoder {
                 return new InstructionResult(rd, memory.read(result).getWord());
             case 2:
                 //STR
+                System.out.println("in store");
                 rd = getIntInRange(instruction, 7, 5);
                 rn = getIntInRange(instruction, 12, 5);
                 if (getIntInRange(instruction, 6,1)==1){
-                    result = registers.getContent(rd) + getIntInRange(instruction, 24,8);
+                    result = registers.getContent(rn) + getIntInRange(instruction, 24,8);
                 }else{
-                    result = registers.getContent(rd);
+                    result = registers.getContent(rn);
                 }
-                memory.write(result, new RWMemoryObject(registers.getContent(rn),0));
+                memory.write(registers.getContent(rd), new RWMemoryObject(result,0));
                 return null;
             default:
                 System.out.println("memory operation not recognized");

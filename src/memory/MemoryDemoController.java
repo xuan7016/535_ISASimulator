@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.*;
 
 public class MemoryDemoController {
@@ -75,15 +76,18 @@ public class MemoryDemoController {
         int PC = parseStringBinaryOrDecimal(PC_field.getText());
         System.out.println(PC);
         RWMemoryObject memoryOp = level1.read(PC);
+        PC += 1;
+        registers.setPC(PC);
         InstructionResult ir = decoder.decode(memoryOp.getWord());
         System.out.println(memoryOp.getWord());
         cycleCount += memoryOp.getWait();
-        registers.setContent(ir.getDestination(), ir.getResult());
-        PC += 1;
-        registers.setPC(PC);
-        cycle_text.setText(""+cycleCount);
-        PC_field.setText(""+PC);
+        if (ir!=null) {
+            registers.setContent(ir.getDestination(), ir.getResult());
+        }
+        cycle_text.setText(""+(cycleCount+5));
+        PC_field.setText(""+registers.getPC());
         updateRegisterDisplay();
+        changeMemoryDisplay_button();
     }
 
     private ObservableList<MemoryDisplayObject> formatRegisters(){
@@ -110,10 +114,10 @@ public class MemoryDemoController {
                         data.add(new MemoryDisplayObject(i, Integer.toString(memory.getMemory()[i])));
                         break;
                     case "Hex":
-                        data.add(new MemoryDisplayObject(i, "0x"+Integer.toHexString(memory.getMemory()[i])));
+                        data.add(new MemoryDisplayObject(i, Integer.toHexString(memory.getMemory()[i])));
                         break;
                     case "Binary":
-                        data.add(new MemoryDisplayObject(i, "0b"+Integer.toBinaryString(memory.getMemory()[i])));
+                        data.add(new MemoryDisplayObject(i, String.format("%32s", Integer.toBinaryString(memory.getMemory()[i])).replace(" ", "0")));
                         break;
                     case "Decoded":
                         data.add(new MemoryDisplayObject(i, BinaryInstructionOperations.decode(memory.getMemory()[i])));
@@ -128,10 +132,10 @@ public class MemoryDemoController {
                             data.add(new MemoryDisplayObject(i, Integer.toString(level1.directRead(i))));
                             break;
                         case "Hex":
-                            data.add(new MemoryDisplayObject(i, "0x"+Integer.toHexString(level1.directRead(i))));
+                            data.add(new MemoryDisplayObject(i, Integer.toHexString(level1.directRead(i))));
                             break;
                         case "Binary":
-                            data.add(new MemoryDisplayObject(i, "0b"+Integer.toBinaryString(level1.directRead(i))));
+                            data.add(new MemoryDisplayObject(i, String.format("%32s", Integer.toBinaryString(level1.directRead(i)).replace(" ", "0"))));
                             break;
                         case "Decoded":
                             data.add(new MemoryDisplayObject(i, BinaryInstructionOperations.decode(level1.directRead(i))));
@@ -145,10 +149,10 @@ public class MemoryDemoController {
                             data.add(new MemoryDisplayObject(i, Integer.toString(level2.directRead(i))));
                             break;
                         case "Hex":
-                            data.add(new MemoryDisplayObject(i, "0x"+Integer.toHexString(level2.directRead(i))));
+                            data.add(new MemoryDisplayObject(i, Integer.toHexString(level2.directRead(i))));
                             break;
                         case "Binary":
-                            data.add(new MemoryDisplayObject(i, "0b"+Integer.toBinaryString(level2.directRead(i))));
+                            data.add(new MemoryDisplayObject(i, String.format("%32s", Integer.toBinaryString(level2.directRead(i)).replace(" ", "0"))));
                             break;
                         case "Decoded":
                             data.add(new MemoryDisplayObject(i, BinaryInstructionOperations.decode(level2.directRead(i))));
@@ -187,7 +191,7 @@ public class MemoryDemoController {
             String line = null;
             while ((line = br.readLine()) != null){
                 int[] memory = this.memory.getMemory();
-                memory[memoryLocation] = Integer.parseInt(line, 2);
+                memory[memoryLocation] = new BigInteger(line, 2).intValue();
                 memoryLocation += 1;
             }
         }catch (Exception e){

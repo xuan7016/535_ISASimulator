@@ -6,7 +6,7 @@ public class BinaryInstructionOperations {
     public BinaryInstructionOperations(){}
 
     public static String decode(int instruction){
-        int firstThree = (int)(instruction >> 29);
+        int firstThree = (int)(instruction >>> 29);
         switch(firstThree){
             case 1:
                 // ALU operations
@@ -18,7 +18,7 @@ public class BinaryInstructionOperations {
                 // memory operations
                 return mem_decode(instruction);
             default:
-                System.out.println("unsupported operation or not an operation");
+                //System.out.println("unsupported operation or not an operation");
                 return Integer.toString(instruction);
         }
     }
@@ -26,7 +26,7 @@ public class BinaryInstructionOperations {
     //index start from 0
     private static int getIntInRange(int bits, int start, int length){
         int mask = (1 << length) -1;
-        int shiftAmount = (32 - Integer.numberOfLeadingZeros(bits)) - (start + length);
+        int shiftAmount = 32 - (start + length);
         return (bits >>> shiftAmount) & mask;
 
     }
@@ -160,7 +160,7 @@ public class BinaryInstructionOperations {
                 rm = getIntInRange(instruction,13,5);
                 return "NOT R" + rd + " R" + rm;
             default:
-                System.out.println("alu operation not recognized");
+                //System.out.println("alu operation not recognized");
                 return null;
         }
     }
@@ -205,7 +205,7 @@ public class BinaryInstructionOperations {
     }
 
     private static String mem_decode(int instruction){
-        int operation = (instruction >>> 28) & 0b000111;
+        int operation = (instruction >>> 26) & 0b000111;
         int rd = 0;
         int rn = 0;
         int imm = 0;
@@ -235,7 +235,7 @@ public class BinaryInstructionOperations {
                     return "STR R" + rd + " R" + rn;
                 }
             default:
-                System.out.println("memory operation not recognized");
+                //System.out.println("memory operation not recognized");
                 return null;
         }
     }
