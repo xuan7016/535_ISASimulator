@@ -60,10 +60,10 @@
                       </value>
                   </ComboBox>
                   <Text layoutX="407.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Program Counter:" />
-                  <TextField fx:id="PC_field" layoutX="504.0" layoutY="23.0" text="0" />
+                  <TextField fx:id="PC_field" layoutX="514.0" layoutY="23.0" text="0" />
                   <Text layoutX="689.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cycles: " />
                   <Button layoutX="404.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#step" text="Step Instruction" />
-                  <Text fx:id="cycle_text" layoutX="730.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="61.13671875" />
+                  <Text fx:id="cycle_text" layoutX="739.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="61.13671875" />
                   <TableView fx:id="registersTableView" layoutX="812.0" layoutY="99.0" prefHeight="669.0" prefWidth="266.0">
                     <placeholder>
                         <Label text="" />
