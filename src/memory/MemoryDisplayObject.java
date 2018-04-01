@@ -2,15 +2,15 @@ package memory;
 
 public class MemoryDisplayObject {
 
-    private int address;
+    private String address;
     private String content;
 
-    public MemoryDisplayObject(int address, String content){
+    public MemoryDisplayObject(String address, String content){
         this.address = address;
         this.content = content;
     }
 
-    public int getAddress() {
+    public String getAddress() {
         return address;
     }
 
@@ -18,7 +18,7 @@ public class MemoryDisplayObject {
         return content;
     }
 
-    public void setAddress(int address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 

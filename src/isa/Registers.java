@@ -4,6 +4,7 @@ public class Registers {
 
     private int[] registers;
     private int PC;
+    private int ret;
 
     public Registers(int size){
         this.registers = new int[size];
@@ -27,5 +28,13 @@ public class Registers {
 
     public int getLength(){
         return registers.length;
+    }
+
+    public void setRet(int ret){
+        this.ret = ret;
+    }
+
+    public int getRet(){
+        return ret;
     }
 }

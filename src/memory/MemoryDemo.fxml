@@ -44,7 +44,7 @@
                               <String fx:value="Memory" />
                       </value>
                   </ComboBox>
-                  <Button fx:id="load_program" layoutX="979.0" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#load_program" text="Load Program" />
+                  <Button fx:id="load_program" layoutX="979.0" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#load_program_button" text="Load Program" />
                   <Text layoutX="58.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Display Type:" />
                   <ComboBox fx:id="displayType" layoutX="253.0" layoutY="23.0" onAction="#displayTypeClicked" prefHeight="25.0" prefWidth="100.0">
                         <items>
@@ -73,6 +73,9 @@
                       <TableColumn fx:id="registersContentColumn" editable="false" prefWidth="119.0" sortable="false" text="Content" />
                     </columns>
                   </TableView>
+                  <Button fx:id="load_and_compile" layoutX="968.0" layoutY="56.0" mnemonicParsing="false" onMouseClicked="#load_and_compile" text="Load and Compile" />
+                  <Button layoutX="520.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#execute_all" text="Execute All" />
+                  <Button layoutX="407.0" layoutY="99.0" mnemonicParsing="false" onMouseClicked="#set_breakpoint" text="Set Breakpoint" />
                </children>
             </AnchorPane>
          </content>

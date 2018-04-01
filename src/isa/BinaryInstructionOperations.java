@@ -14,9 +14,14 @@ public class BinaryInstructionOperations {
             case 2:
                 // branch operations
                 return branch_decode(instruction);
+            case 3:
+                // comparisons
+                return cmp_decode(instruction);
             case 4:
                 // memory operations
                 return mem_decode(instruction);
+            case 0b111:
+                return "HLT";
             default:
                 //System.out.println("unsupported operation or not an operation");
                 return Integer.toString(instruction);
@@ -29,6 +34,41 @@ public class BinaryInstructionOperations {
         int shiftAmount = 32 - (start + length);
         return (bits >>> shiftAmount) & mask;
 
+    }
+
+    private static String cmp_decode(int instruction){
+        int operation = (instruction >>> 24) & 0b00011111;
+        int rd = getIntInRange(instruction, 8, 5);
+        int rm = getIntInRange(instruction, 13, 5);
+        int rn = getIntInRange(instruction, 19, 5);
+        int i = getIntInRange(instruction, 18, 1);
+        int imm = getIntInRange(instruction, 19, 13);
+        switch(operation){
+            case 1:
+                // EQ
+                if (i==1){
+                    return "EQ R" + rd + " R" + rm + " " + imm;
+                }else{
+                    return "EQ R" + rd + " R" + rm + " R" + rn;
+                }
+            case 2:
+                // LS
+                if (i==1){
+                    return "LS R" + rd + " R" + rm + " " + imm;
+                }else{
+                    return "LS R" + rd + " R" + rm + " R" + rn;
+                }
+            case 3:
+                //GT
+                if (i==1){
+                    return "GT R" + rd + " R" + rm + " " + imm;
+                }else{
+                    return "GT R" + rd + " R" + rm + " R" + rn;
+                }
+            default:
+                System.out.println("unknown cmp operation");
+                return null;
+        }
     }
 
     private static String ALU_decode(int instruction){

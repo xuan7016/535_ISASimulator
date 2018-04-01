@@ -23,8 +23,9 @@ public class Decoder {
             case 2:
                 // branch operations
                 return branch_decode(instruction);
-//            case 3:
-//                return logic_decode(instruction);
+            case 3:
+                // comparisions
+                return cmp_decode(instruction);
             case 4:
                 // memory operations
                 return mem_decode(instruction);
@@ -207,7 +208,7 @@ public class Decoder {
                 //JCD
                 rd = getIntInRange(instruction, 8,5);
                 rn = getIntInRange(instruction, 13,5);
-                if (rn==1) {
+                if (registers.getContent(rn)==1) {
                     if (getIntInRange(instruction, 18, 1) == 1) {
                         registers.setPC(getIntInRange(instruction, 19, 13));
                     } else {
@@ -216,9 +217,17 @@ public class Decoder {
                 }
                 return null;
             case 3:
-                //JSR TODO
+                // JSR
+                rd = getIntInRange(instruction, 8, 5);
+                registers.setRet(registers.getPC());
+                if (getIntInRange(instruction, 15, 1)==1){
+                    registers.setPC(getIntInRange(instruction, 16,16));
+                }else{
+                    registers.setPC(registers.getContent(rd));
+                }
             case 4:
-                //RET TODO
+                //RET
+                registers.setPC(registers.getRet());
             default:
                 System.out.println("branch operation not recognized");
 
@@ -226,17 +235,62 @@ public class Decoder {
         return null;
     }
 
-//    private InstructionResult logic_decode(int instruction){
-//        int operation = (instruction >>> 24) * 0b00011111;
-//        int rd = 0;
-//        int rn = 0;
-//        int result = 0;
-//        switch(operation){
-//            case 1:
-//                //EQ
-//                rd = getIntInRange(instruction, )
-//        }
-//    }
+    private InstructionResult cmp_decode(int instruction){
+        int operation = (instruction >>> 24) & 0b00011111;
+        int rd = getIntInRange(instruction, 8, 5);
+        int rm = getIntInRange(instruction, 13, 5);
+        int rn = getIntInRange(instruction, 19, 5);
+        int i = getIntInRange(instruction, 18, 1);
+        switch(operation){
+            case 1:
+                //EQ
+                if (i == 1){
+                    if (getIntInRange(instruction, 19, 13) == registers.getContent(rm)){
+                        return new InstructionResult(rd, 1);
+                    }else{
+                        return new InstructionResult(rd, 0);
+                    }
+                }else{
+                    if (registers.getContent(rm) == registers.getContent(rn)){
+                        return new InstructionResult(rd, 1);
+                    }else{
+                        return new InstructionResult(rd, 0);
+                    }
+                }
+            case 2:
+                // LS
+                if (i == 1){
+                    if (getIntInRange(instruction, 19, 13) > registers.getContent(rm)){
+                        return new InstructionResult(rd, 1);
+                    }else{
+                        return new InstructionResult(rd, 0);
+                    }
+                }else{
+                    if (registers.getContent(rm) < registers.getContent(rn)){
+                        return new InstructionResult(rd, 1);
+                    }else{
+                        return new InstructionResult(rd, 0);
+                    }
+                }
+            case 3:
+                if (i == 1){
+                    if (getIntInRange(instruction, 19, 13) < registers.getContent(rm)){
+                        return new InstructionResult(rd, 1);
+                    }else{
+                        return new InstructionResult(rd, 0);
+                    }
+                }else{
+                    if (registers.getContent(rm) > registers.getContent(rn)){
+                        return new InstructionResult(rd, 1);
+                    }else{
+                        return new InstructionResult(rd, 0);
+                    }
+                }
+            default:
+                System.out.println("unsupported comparision operation");
+                return null;
+        }
+    }
 
     private InstructionResult mem_decode(int instruction){
         int operation = (instruction >>> 26) & 0b000111;
