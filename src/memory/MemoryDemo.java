@@ -22,7 +22,7 @@ public class MemoryDemo extends Application {
     public void start(Stage primaryStage) {
 
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Memory Demo");
+        this.primaryStage.setTitle("Demo");
 
         try{
             FXMLLoader loader = new FXMLLoader(MemoryDemo.class.getResource("MemoryDemo.fxml"));
