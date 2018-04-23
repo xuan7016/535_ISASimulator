@@ -10,7 +10,7 @@
 
 <TabPane prefHeight="822.0" prefWidth="1110.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="memory.MemoryDemoController">
    <tabs>
-      <Tab fx:id="tab_memory" closable="false" text="Memory">
+      <Tab fx:id="tab_memory" closable="false" text="Main">
          <content>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1111.0">
                <children>
@@ -74,15 +74,25 @@
                     </columns>
                   </TableView>
                   <Button fx:id="load_and_compile" layoutX="968.0" layoutY="56.0" mnemonicParsing="false" onMouseClicked="#load_and_compile" text="Load and Compile" />
-                  <Button layoutX="520.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#execute_all" text="Execute All" />
+                  <Button layoutX="607.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#execute_all" text="Execute All" />
                   <Button layoutX="407.0" layoutY="99.0" mnemonicParsing="false" onMouseClicked="#set_breakpoint" text="Set Breakpoint" />
+                  <Text fx:id="fetchText" layoutX="407.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="246.13671875" />
+                  <Text fx:id="decodeText" layoutX="407.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="246.13671875" />
+                  <Text fx:id="executeText" layoutX="407.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="246.13671875" />
+                  <Text fx:id="memoryText" layoutX="407.0" layoutY="323.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="246.13671875" />
+                  <Text fx:id="writeText" layoutX="407.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="246.13671875" />
+                  <Button layoutX="513.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#step_pipeline" text="Step Pipeline" />
                </children>
             </AnchorPane>
          </content>
       </Tab>
-      <Tab closable="false" text="Registers">
+      <Tab closable="false" text="Options">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <CheckBox fx:id="cache_checkbox" layoutX="42.0" layoutY="40.0" mnemonicParsing="false" selected="true" text="Cache" />
+                  <CheckBox fx:id="pipeline_checkbox" layoutX="42.0" layoutY="78.0" mnemonicParsing="false" selected="true" text="Pipeline" />
+               </children></AnchorPane>
         </content>
       </Tab>
    </tabs>

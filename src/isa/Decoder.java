@@ -199,20 +199,23 @@ public class Decoder {
             case 1:
                 //JMP
                 if (getIntInRange(instruction, 16,1)==1){
-                    registers.setPC(getIntInRange(instruction,17,15));
+                    //registers.setPC(getIntInRange(instruction,17,15));
+                    return new InstructionResult(32, getIntInRange(instruction,17,15));
                 }else{
-                    registers.setPC(registers.getContent(getIntInRange(instruction, 8,5)));
+                    //registers.setPC(registers.getContent(getIntInRange(instruction, 8,5)));
+                    return new InstructionResult(32, registers.getContent(getIntInRange(instruction, 8,5)));
                 }
-                return null;
             case 2:
                 //JCD
                 rd = getIntInRange(instruction, 8,5);
                 rn = getIntInRange(instruction, 13,5);
                 if (registers.getContent(rn)==1) {
                     if (getIntInRange(instruction, 18, 1) == 1) {
-                        registers.setPC(getIntInRange(instruction, 19, 13));
+                        //registers.setPC(getIntInRange(instruction, 19, 13));
+                        return new InstructionResult(32, getIntInRange(instruction, 19, 13));
                     } else {
-                        registers.setPC(registers.getContent(rd));
+                        //registers.setPC(registers.getContent(rd));
+                        return new InstructionResult(32, registers.getContent(rd));
                     }
                 }
                 return null;
@@ -221,13 +224,16 @@ public class Decoder {
                 rd = getIntInRange(instruction, 8, 5);
                 registers.setRet(registers.getPC());
                 if (getIntInRange(instruction, 15, 1)==1){
-                    registers.setPC(getIntInRange(instruction, 16,16));
+                    //registers.setPC(getIntInRange(instruction, 16,16));
+                    return new InstructionResult(32, getIntInRange(instruction, 16, 16));
                 }else{
-                    registers.setPC(registers.getContent(rd));
+                    //registers.setPC(registers.getContent(rd));
+                    return new InstructionResult(32, registers.getContent(rd));
                 }
             case 4:
                 //RET
-                registers.setPC(registers.getRet());
+                //registers.setPC(registers.getRet());
+                return new InstructionResult(32, registers.getRet());
             default:
                 System.out.println("branch operation not recognized");
 

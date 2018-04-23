@@ -1,9 +1,6 @@
 package memory;
 
-import isa.BinaryInstructionOperations;
-import isa.Decoder;
-import isa.InstructionResult;
-import isa.Registers;
+import isa.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,6 +25,8 @@ public class MemoryDemoController {
     private CacheSet[] level2Sets;
     private MemoryObject memory;
     private ArrayList<Integer> breakpoints;
+    private ArrayList<String> pipeline_using;
+    private boolean count_all;
     @FXML private TextField addressTextField;
     @FXML private TextField memoryDisplayRangeStart;
     @FXML private TextField memoryDisplayRangeEnd;
@@ -41,20 +40,29 @@ public class MemoryDemoController {
     @FXML private TableColumn<MemoryDisplayObject, String> registersIndexColumn;
     @FXML private TableColumn<MemoryDisplayObject, String> registersContentColumn;
     @FXML private Text cycle_text;
+    @FXML private Text fetchText;
+    @FXML private Text decodeText;
+    @FXML private Text executeText;
+    @FXML private Text memoryText;
+    @FXML private Text writeText;
+    @FXML private CheckBox cache_checkbox;
+    @FXML private CheckBox pipeline_checkbox;
 
     public MemoryDemoController(){
+        this.pipeline_using = new ArrayList<>();
         this.memory = new MemoryObject(4194304);
         this.level2 = new CacheObject(512, 11, memory);
-        this.level1 = new CacheObject(64, 4, level2);
+        this.level1 = new CacheObject(64, 3, level2);
         this.registers = new Registers(32);
         this.decoder = new Decoder(registers, level1);
         this.level1Sets = level1.getCache();
         this.level2Sets = level2.getCache();
+        this.breakpoints = new ArrayList<>();
+        this.count_all = true;
     }
 
     @FXML
     public void initialize(){
-        breakpoints = new ArrayList<>();
         memoryTable_address.setCellValueFactory(new PropertyValueFactory<>("address"));
         memoryTable_content.setCellValueFactory(new PropertyValueFactory<>("content"));
         memoryTable.getItems().setAll(readyDataForDisplay());
@@ -69,38 +77,101 @@ public class MemoryDemoController {
         for (int i=0;i<l2SetIndex.length;i++){
             l2SetIndex[i]=i;
         }
+        fetchText.setText("");
+        decodeText.setText("");
+        executeText.setText("");
+        memoryText.setText("");
+        writeText.setText("");
     }
 
+
     @FXML void step(){
+        if (pipeline_checkbox.isSelected()){
+            step_pipeline();
+        }else{
+            step_no_pipe();
+        }
+    }
+
+    @FXML void step_pipeline(){
         int PC = parseStringBinaryOrDecimal(PC_field.getText());
-        RWMemoryObject memoryOp = level1.read(PC);
+        RWMemoryObject memoryOp;
+        if (cache_checkbox.isSelected()){
+            memoryOp = level1.read(PC);
+        }else{
+            memoryOp = memory.read(PC);
+        }
+        int instruction = memoryOp.getWord();
+        // if HLT then stop
+        if ((memoryOp.getWord() >>> 29) == 0b111) return;
+
+        String[] tokenized = BinaryInstructionOperations.decode(memoryOp.getWord()).split(" ");
+        int cycleCount = Integer.parseInt(cycle_text.getText());
+        if (count_all){
+            count_all=false;
+            cycleCount += memoryOp.getWait() + 5;
+            if (!pipeline_using.isEmpty()) pipeline_using.remove(0);
+            pipeline_using.add(tokenized[1]);
+        }else{
+            if (tokenized.length > 1) {
+                if (check_in_use(tokenized)){
+                    cycleCount += 2;
+                    if (!pipeline_using.isEmpty()) pipeline_using.remove(0);
+                    pipeline_using.add(tokenized[1]);
+                } else {
+                    cycleCount += 1;
+                    if (!pipeline_using.isEmpty()) pipeline_using.remove(0);
+                    pipeline_using.add(tokenized[1]);
+                }
+            }else{
+                cycleCount += 1;
+            }
+        }
+        if ((memoryOp.getWord() >>> 29) == 0b010) count_all = true;
+
+        PC += 1;
+        registers.setPC(PC);
+        InstructionResult ir = decoder.decode(instruction);
+        if (ir!=null){
+            if (ir.getDestination()==32){
+                registers.setPC(ir.getResult());
+            }else {
+                registers.setContent(ir.getDestination(), ir.getResult());
+            }
+        }
+        cycle_text.setText("" + cycleCount);
+        PC_field.setText(""+registers.getPC());
+        System.out.println(pipeline_using);
+        updateRegisterDisplay();
+        changeMemoryDisplay_button();
+    }
+
+    private void step_no_pipe(){
+        int PC = parseStringBinaryOrDecimal(PC_field.getText());
+        RWMemoryObject memoryOp;
+        if (cache_checkbox.isSelected()){
+            memoryOp = level1.read(PC);
+        }else{
+            memoryOp = memory.read(PC);
+        }
         // if HLT then stop
         if ((memoryOp.getWord() >>> 29) == 0b111) return;
         execute(memoryOp.getWord(), memoryOp.getWait());
-//        int cycleCount = Integer.parseInt(cycle_text.getText());
-//        int PC = parseStringBinaryOrDecimal(PC_field.getText());
-//        PC += 1;
-//        registers.setPC(PC);
-//        InstructionResult ir = decoder.decode(memoryOp.getWord());
-//        System.out.println(memoryOp.getWord());
-//        cycleCount += memoryOp.getWait();
-//        if (ir!=null) {
-//            registers.setContent(ir.getDestination(), ir.getResult());
-//        }
-//        cycle_text.setText(""+(cycleCount+5));
-//        PC_field.setText(""+registers.getPC());
-//        updateRegisterDisplay();
-//        changeMemoryDisplay_button();
     }
 
     @FXML void execute_all(){
         while(true){
             int PC = parseStringBinaryOrDecimal(PC_field.getText());
+            // if breakpoint then stop
             if (breakpoints.contains(PC)) return;
-            RWMemoryObject memoryOp = level1.read(PC);
+            RWMemoryObject memoryOp = memory.read(PC);
             // if HLT then stop
             if ((memoryOp.getWord() >>> 29) == 0b111) return;
-            execute(memoryOp.getWord(), memoryOp.getWait());
+            if (pipeline_checkbox.isSelected()){
+                step_pipeline();
+            }else {
+                step_no_pipe();
+            }
         }
     }
 
@@ -112,12 +183,27 @@ public class MemoryDemoController {
         InstructionResult ir = decoder.decode(instruction);
         cycleCount += wait;
         if (ir!=null) {
-            registers.setContent(ir.getDestination(), ir.getResult());
+            if (ir.getDestination()==32){
+                registers.setPC(ir.getResult());
+            }else {
+                registers.setContent(ir.getDestination(), ir.getResult());
+            }
         }
         cycle_text.setText(""+(cycleCount+5));
         PC_field.setText(""+registers.getPC());
         updateRegisterDisplay();
         changeMemoryDisplay_button();
+    }
+
+    private boolean check_in_use(String[] tokenized){
+        for (String s : tokenized){
+            if (s.charAt(0)=='R'){
+                if (pipeline_using.contains(s)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -254,7 +340,11 @@ public class MemoryDemoController {
 
     @FXML void set_breakpoint(){
         int address = memoryTable.getSelectionModel().getSelectedIndex();
-        breakpoints.add(address);
+        if (breakpoints.contains(address)){
+            breakpoints.remove(new Integer(address));
+        }else {
+            breakpoints.add(address);
+        }
         changeMemoryDisplay_button();
     }
 
